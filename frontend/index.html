@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FIFA Player Rating Prediction</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 8px;
+            box-sizing: border-box;
+        }
+        .btn {
+            background-color: #007BFF;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            cursor: pointer;
+        }
+        .btn:hover {
+            background-color: #0056b3;
+        }
+        .popup-card {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #FFD700;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            z-index: 1000;
+        }
+        .popup-card h2 {
+            margin-bottom: 15px;
+        }
+        .popup-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+        }
+        .close-btn {
+            background-color: #dc3545;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            cursor: pointer;
+            border-radius: 25px;
+        }
+        .close-btn:hover {
+            background-color: #c82333;
+        }
+        #predictionResult {
+            font-size: 48px;
+            font-weight: bold;
+            color: #000; 
+            margin-bottom: 10px;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+        }
+
+        .stat {
+            background-color: #f0f0f0; /* พื้นหลังของสถิติ */
+            padding: 10px;
+            border-radius: 5px; /* มุมโค้ง */
+        }
+
+    </style>
+</head>
+<body>
+
+    <h1>Football Player Rating Prediction</h1>
+    
+    <div class="container">
+        <div class="form-group">
+            <label for="crossing">Crossing</label>
+            <input type="number" id="crossing" placeholder="Enter crossing" required>
+        </div>
+        <div class="form-group">
+            <label for="finishing">Finishing</label>
+            <input type="number" id="finishing" placeholder="Enter finishing" required>
+        </div>
+        <div class="form-group">
+            <label for="short_passing">Short Passing</label>
+            <input type="number" id="short_passing" placeholder="Enter short passing" required>
+        </div>
+        <div class="form-group">
+            <label for="dribbling">Dribbling</label>
+            <input type="number" id="dribbling" placeholder="Enter dribbling" required>
+        </div>
+        <div class="form-group">
+            <label for="ball_control">Ball Control</label>
+            <input type="number" id="ball_control" placeholder="Enter ball control" required>
+        </div>
+        <div class="form-group">
+            <label for="acceleration">Acceleration</label>
+            <input type="number" id="acceleration" placeholder="Enter acceleration" required>
+        </div>
+        <div class="form-group">
+            <label for="sprint_speed">Sprint Speed</label>
+            <input type="number" id="sprint_speed" placeholder="Enter sprint speed" required>
+        </div>
+        <div class="form-group">
+            <label for="agility">Agility</label>
+            <input type="number" id="agility" placeholder="Enter agility" required>
+        </div>
+        <div class="form-group">
+            <label for="shot_power">Shot Power</label>
+            <input type="number" id="shot_power" placeholder="Enter shot power" required>
+        </div>
+        <div class="form-group">
+            <label for="stamina">Stamina</label>
+            <input type="number" id="stamina" placeholder="Enter stamina" required>
+        </div>
+        <div class="form-group">
+            <label for="vision">Vision</label>
+            <input type="number" id="vision" placeholder="Enter vision" required>
+        </div>
+        <div class="form-group">
+            <label for="reactions">Reactions</label>
+            <input type="number" id="reactions" placeholder="Enter reactions" required>
+        </div>
+        <div class="form-group">
+            <label for="composure">Composure</label>
+            <input type="number" id="composure" placeholder="Enter composure" required>
+        </div>
+        <div class="form-group">
+            <label for="strength">Strength</label>
+            <input type="number" id="strength" placeholder="Enter strength" required>
+        </div>
+        <div class="form-group">
+            <label for="interceptions">Interceptions</label>
+            <input type="number" id="interceptions" placeholder="Enter interceptions" required>
+        </div>
+        <div class="form-group">
+            <label for="standing_tackle">Standing Tackle</label>
+            <input type="number" id="standing_tackle" placeholder="Enter standing tackle" required>
+        </div>
+        <div class="form-group">
+            <label for="sliding_tackle">Sliding Tackle</label>
+            <input type="number" id="sliding_tackle" placeholder="Enter sliding tackle" required>
+        </div>
+        <div class="form-group">
+            <label for="heading_accuracy">Heading Accuracy</label>
+            <input type="number" id="heading_accuracy" placeholder="Enter heading accuracy" required>
+        </div>
+        <div class="form-group">
+            <label for="marking">Marking</label>
+            <input type="number" id="marking" placeholder="Enter marking" required>
+        </div>
+        <div class="form-group">
+            <label for="aggression">Aggression</label>
+            <input type="number" id="aggression" placeholder="Enter aggression" required>
+        </div>
+        
+        <button class="btn" onclick="predict()">Predict Rating</button>
+
+        <div id="popupOverlay" class="popup-overlay"></div>
+        <div id="popupCard" class="popup-card">
+            <div class="card" style="margin-bottom: 10px;">
+                <h2>Predicted Overall Rating</h2>
+                <div id="predictionResult"></div>
+                <div class="player-image">
+                    <img id="user-image" src="/static/images/user.png" alt="User Image" style="width:250px;height:250px;"/>
+                </div>
+                <div class="stats" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;">
+                    <div class="stat" id="crossingStat">Crossing: <span id="crossingValue"></span></div>
+                    <div class="stat" id="staminaStat">Stamina: <span id="staminaValue"></span></div>
+                    <div class="stat" id="finishingStat">Finishing: <span id="finishingValue"></span></div>
+                    <div class="stat" id="ballControlStat">Ball Control: <span id="ballControlValue"></span></div>
+                    <div class="stat" id="strengthStat">Strength: <span id="strengthValue"></span></div>
+                    <div class="stat" id="sprintSpeedStat">Sprint Speed: <span id="sprintSpeedValue"></span></div>
+                </div>                
+            </div>
+            <button class="close-btn" onclick="closePopup()">Close</button>
+        </div>
+    </div>
+
+    <script>
+        async function predict() {
+            const crossing = document.getElementById('crossing').value;
+            const finishing = document.getElementById('finishing').value;
+            const short_passing = document.getElementById('short_passing').value;
+            const dribbling = document.getElementById('dribbling').value;
+            const ball_control = document.getElementById('ball_control').value;
+            const acceleration = document.getElementById('acceleration').value;
+            const sprint_speed = document.getElementById('sprint_speed').value;
+            const agility = document.getElementById('agility').value;
+            const shot_power = document.getElementById('shot_power').value;
+            const stamina = document.getElementById('stamina').value;
+            const vision = document.getElementById('vision').value;
+            const reactions = document.getElementById('reactions').value;
+            const composure = document.getElementById('composure').value;
+            const strength = document.getElementById('strength').value;
+            const interceptions = document.getElementById('interceptions').value;
+            const standing_tackle = document.getElementById('standing_tackle').value;
+            const sliding_tackle = document.getElementById('sliding_tackle').value;
+            const heading_accuracy = document.getElementById('heading_accuracy').value;
+            const marking = document.getElementById('marking').value;
+            const aggression = document.getElementById('aggression').value;
+
+            const data = {
+                crossing: parseFloat(crossing),
+                finishing: parseFloat(finishing),
+                short_passing: parseFloat(short_passing),
+                dribbling: parseFloat(dribbling),
+                ball_control: parseFloat(ball_control),
+                acceleration: parseFloat(acceleration),
+                sprint_speed: parseFloat(sprint_speed),
+                agility: parseFloat(agility),
+                shot_power: parseFloat(shot_power),
+                stamina: parseFloat(stamina),
+                vision: parseFloat(vision),
+                reactions: parseFloat(reactions),
+                composure: parseFloat(composure),
+                strength: parseFloat(strength),
+                interceptions: parseFloat(interceptions),
+                standing_tackle: parseFloat(standing_tackle),
+                sliding_tackle: parseFloat(sliding_tackle),
+                heading_accuracy: parseFloat(heading_accuracy),
+                marking: parseFloat(marking),
+                aggression: parseFloat(aggression),
+            };
+            try {
+                const response = await fetch('http://localhost:5000/predict', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(data),
+                });
+
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+
+                const result = await response.json();
+                document.getElementById('predictionResult').innerHTML = `${Math.round(result.overall_rating)}`;
+
+                document.getElementById('crossingStat').innerHTML = `Crossing: ${Math.round(data.crossing)}`;
+                document.getElementById('finishingStat').innerHTML = `Finishing: ${Math.round(data.finishing)}`;
+                document.getElementById('strengthStat').innerHTML = `Strength: ${Math.round(data.strength)}`;
+                document.getElementById('staminaStat').innerHTML = `Stamina: ${Math.round(data.stamina)}`;
+                document.getElementById('ballControlStat').innerHTML = `Ball Control: ${Math.round(data.ball_control)}`;
+                document.getElementById('sprintSpeedStat').innerHTML = `Sprint Speed: ${Math.round(data.sprint_speed)}`;
+
+                showPopup();
+            } catch (error) {
+                console.error('Error:', error);
+                document.getElementById('predictionResult').innerHTML = 'Error predicting rating. Please try again.';
+                showPopup();
+            }
+        }
+        function showPopup() {
+            document.getElementById('popupOverlay').style.display = 'block';
+            document.getElementById('popupCard').style.display = 'block';
+        }
+
+        function closePopup() {
+            document.getElementById('popupOverlay').style.display = 'none';
+            document.getElementById('popupCard').style.display = 'none';
+        }
+    </script>
+
+</body>
+</html>
